@@ -1,7 +1,10 @@
 import MainPage from '../src/mainPage/mainPage';
+import { ReduxWrapper } from '../src/store';
 
-export default function App() {
+const App = () => {
 	return (
 		<MainPage />
 	);
 }
+
+export default ReduxWrapper.withRedux(App);

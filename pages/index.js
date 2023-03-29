@@ -1,8 +1,14 @@
 import App from "./_app";
+import React from 'react';
+import { Provider } from 'react-redux';
+// import ReduxWrapper from './slices/index.jsx';
 
 const Index = () => {
+
     return (
-        <App />
+        <Provider store={store}>
+            <App />
+        </Provider>
     );
 }
 

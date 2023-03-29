@@ -7,7 +7,7 @@ import {
 } from '@mantine/core';
 import { useRouter } from 'next/router';
 
-const TaskModal = ({ setOpened, createTask, opened, taskTitle, taskSummary, taskId }) => {
+const TaskModal = ({ setOpened, opened, taskId, state }) => {
 	const router = useRouter();
 	const { query: { task }, pathname } = router || {};
     return (
