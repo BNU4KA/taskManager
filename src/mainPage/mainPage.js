@@ -55,7 +55,7 @@ const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = fa
 		
 	}
 
-	const deleteTask = () => {}
+	const deleteTask = () => console.log('123');
 
 	const TaskItem = ({ task, index }) => {
 		return (

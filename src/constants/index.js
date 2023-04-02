@@ -1,1 +1,1 @@
-export const ROOT_API_URL = 'https://lupa.by/'
+export const ROOT_API_URL = 'https://zalupa.by/'
