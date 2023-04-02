@@ -55,6 +55,8 @@ const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = fa
 		
 	}
 
+	const deleteTask = () => {}
+
 	const TaskItem = ({ task, index }) => {
 		return (
 			<Card key={index} withBorder style={{ cursor: 'pointer' }} mt={'sm'} onClick={() => {
@@ -64,7 +66,8 @@ const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = fa
 				<Group position={'apart'}>
 					<Text weight={'bold'}>{task.title}</Text>
 					<ActionIcon
-						onClick={() => {
+						onClick={(event) => {
+							event.stopPropagation();
 							deleteTask(index);
 						}}
 						color={'red'}
