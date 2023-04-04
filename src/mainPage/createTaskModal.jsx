@@ -27,7 +27,6 @@ const CreateTask = ({ setOpened, createTask, opened, state, handleChange }) => {
 				required
 				label={'Title'}
 				type='text'
-
 			/>
 			<TextInput
 				value={state.description}

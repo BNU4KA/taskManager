@@ -10,11 +10,6 @@ import {
 import { useState, useEffect } from 'react';
 import { MoonStars, Sun, Trash } from 'tabler-icons-react';
 
-import {
-	MantineProvider,
-	ColorSchemeProvider,
-} from '@mantine/core';
-import { useColorScheme } from '@mantine/hooks';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import TaskModal from './taskItemModal';
 import CreateTask from './createTaskModal';
@@ -26,14 +21,16 @@ import { noop } from 'lodash';
 
 const initialState = { title: '', description: '' };
 
-const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = false }) => {
+const MainPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) => {
 	const [opened, setOpened] = useState(false);
 	const [state, setState] = useState(initialState);
 	const [isTaskModalOpend, setIsTaskModalOpend] = useState(false);
 	const router = useRouter(null);
 
+	const [tasks, setTasks] = useState(tasksData);
+
 	useEffect(() => {
-		fetchTasks();
+		fetchTasks({ onSuccess: setTasks });
 	}, []);
 
 	const [colorScheme, setColorScheme] = useLocalStorage({
@@ -55,7 +52,9 @@ const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = fa
 		
 	}
 
-	const deleteTask = () => {}
+	const deleteTask = ({ taskId }) => {
+		setTasks((prevState) => prevState.filter(({ id }) => taskId !== id));
+	};
 
 	const TaskItem = ({ task, index }) => {
 		return (
@@ -68,7 +67,7 @@ const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = fa
 					<ActionIcon
 						onClick={(event) => {
 							event.stopPropagation();
-							deleteTask(index);
+							deleteTask({ taskId: task.id });
 						}}
 						color={'red'}
 						variant={'transparent'}>
@@ -84,29 +83,23 @@ const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = fa
 		)
 	};
 
+	console.log({ tasks });
 	return (
-		<ColorSchemeProvider
-			colorScheme={colorScheme}
-			toggleColorScheme={toggleColorScheme}>
-			<MantineProvider
-				theme={{ colorScheme, defaultRadius: 'md' }}
-				withGlobalStyles
-				withNormalizeCSS
-			>
-				{!isTasksLoaded && (
-					<div style={{ width: '100vw', height: '95vh', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>
-						<SpinnerDotted
-						  height="300"
-						  width="300"
-						  radius="100"
-						  color="green"
-						  ariaLabel="loading"
-						  wrapperStyle
-						  wrapperClass
-						  style={{ width: 100, color: '#fff' }}
-						/>
-					</div>
-				)}
+		<div>
+			{!isTasksLoaded && (
+				<div style={{ width: '100vw', height: '95vh', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', pointerEvents: 'none' }}>
+					<SpinnerDotted
+					  height="300"
+					  width="300"
+					  radius="100"
+					  color="green"
+					  ariaLabel="loading"
+					  wrapperStyle
+					  wrapperClass
+					  style={{ width: 100, color: '#fff' }}
+					/>
+				</div>
+			)}
 				<div className='App'>
 					<CreateTask setOpened={setOpened} state={state} createTask={() => {}} opened={opened} handleChange={handleChange} />
 					<TaskModal opened={isTaskModalOpend} state={state} setOpened={setIsTaskModalOpend} handleChange={handleChange} />
@@ -147,8 +140,7 @@ const MainPage = ({ fetchTasks = noop, tasksData: tasks = [], isTasksLoaded = fa
 						</Button>
 					</Container>
 				</div>
-			</MantineProvider>
-		</ColorSchemeProvider>
+		</div>
 	);
 }
 
@@ -160,7 +152,7 @@ const mapStateToProps = ({
 }) => ({ tasksData, isTasksLoaded });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchTasks: () => dispatch(fetchTasks()),
+  fetchTasks: (data) => dispatch(fetchTasks(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
