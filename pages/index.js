@@ -1,15 +1,8 @@
-import App from "./_app";
 import React from 'react';
-import { Provider } from 'react-redux';
-// import ReduxWrapper from './slices/index.jsx';
+import ProjectPage from '../src/project/ProjectPage';
 
 const Index = () => {
-
-    return (
-        <Provider store={store}>
-            <App />
-        </Provider>
-    );
+    return <ProjectPage />
 }
 
 export default Index;

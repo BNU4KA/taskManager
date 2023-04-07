@@ -1,5 +1,5 @@
+import '../src/styles/custom.scss';
 import { Logout } from 'tabler-icons-react';
-import MainPage from '../src/mainPage/mainPage';
 import { ReduxWrapper } from '../src/store';
 import Login from './login';
 import {
@@ -8,7 +8,7 @@ import {
 } from '@mantine/core';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 
-const App = () => {
+const App = ({ Component }) => {
 const [colorScheme, setColorScheme] = useLocalStorage({
 		key: 'mantine-color-scheme',
 		defaultValue: 'light',
@@ -28,17 +28,9 @@ const [colorScheme, setColorScheme] = useLocalStorage({
 				withGlobalStyles
 				withNormalizeCSS
 			>
-				<Login />
-				{/* <MainPage /> */}
+				<Component />
 			</MantineProvider>
 		</ColorSchemeProvider>
-	);
-  return (
-    <>
-      <Login />
-      {/* <Logout /> */}
-		  {/* <MainPage /> */}
-    </>
 	);
 }
 

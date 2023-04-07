@@ -21,7 +21,7 @@ import { noop } from 'lodash';
 
 const initialState = { title: '', description: '' };
 
-const MainPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) => {
+const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) => {
 	const [opened, setOpened] = useState(false);
 	const [state, setState] = useState(initialState);
 	const [isTaskModalOpend, setIsTaskModalOpend] = useState(false);
@@ -155,4 +155,4 @@ const mapDispatchToProps = (dispatch) => ({
   fetchTasks: (data) => dispatch(fetchTasks(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskPage);

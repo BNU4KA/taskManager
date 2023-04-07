@@ -1,0 +1,21 @@
+.project-item {
+    height: 400px;
+    width: 340px;
+    margin: 10px 10px;
+
+    &__wrapper {
+        
+    }
+}
+
+.content-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+}
+
+.page-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: initial;
+    margin-right: initial;
+}
