@@ -2,15 +2,44 @@
     height: 400px;
     width: 340px;
     margin: 10px 10px;
+    border-radius: 10px;
+    // border: 2px dashed green;
 
-    &__wrapper {
-        
+    &__add-new-project-wrapper {
+        background-color: gray;
+        display: flex;
+        overflow: hidden;
+        align-items: center;
+        border: 2px dashed green;
+    }
+
+    &__add-new-project {
+        width: 100%;
+        height: 50%;
+        margin: 0px 30px;
+        background-color: aliceblue;
+    }
+
+    &__wrapper-content {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 60%;
+        background-color: aliceblue;
+        bottom: 0;
+        flex-direction: column;
+    }
+
+    &__content {
+        padding: 0 15px 10px 15px;
+        overflow: auto;
+        margin-bottom: 10px;
     }
 }
 
 .content-wrapper {
-        display: flex;
-        flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .page-wrapper {

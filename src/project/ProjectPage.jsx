@@ -1,7 +1,13 @@
 import React from 'react';
-import { Container, Title, Skeleton } from "@mantine/core";
+import { Container, Title } from "@mantine/core";
+import ProjectItem from './ProjectItem';
+import { isEmpty } from 'lodash';
 
-const ProjectPage = () => {
+const mockItems = [1, 2, 3, 4, 5];
+// const mockItems = [];
+
+const ProjectPage = ({ ProjectItems = mockItems }) => {
+
     return (
         <Container size='90%' my={40}>
             <Container my={40}>
@@ -14,13 +20,12 @@ const ProjectPage = () => {
 			    </ Title>
             </ Container>
             <Container className='content-wrapper'>
-                {[1, 2, 3, 4, 5].map((item) => (
-                    <Skeleton className='project-item' visible>
-                    <div className='project-item project-item__wrapper'>
-                        
+                {!isEmpty(ProjectItems) && ProjectItems.map((item) => <ProjectItem item={item} />)}
+                <div className='project-item project-item__add-new-project-wrapper'>
+                    <div className='project-item project-item__add-new-project'>
+
                     </div>
-                </Skeleton>
-                ))}
+                </div>
             </Container>
         </Container>
     )
