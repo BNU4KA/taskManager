@@ -44,7 +44,6 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 	useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
 	const handleChange = ({ target: { name, value } }) => {
-		console.log(name, value);
 		setState((prevState) => ({ ...prevState,  [name]: value }))
 	};
 
@@ -60,7 +59,17 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 		return (
 			<Card key={index} withBorder style={{ cursor: 'pointer' }} mt={'sm'} onClick={() => {
 				setIsTaskModalOpend(true);
-				router.push(`${router.asPath}/?task=${task.title}`)
+				router.push(
+            	  {
+            	    pathname: '/[project]/',
+            	    query: {
+            	      project: router.query.project,
+            	      task: task.id,
+            	    },
+            	  },
+            	  undefined,
+            	  { shallow: true }
+            	)
 			}}>
 				<Group position={'apart'}>
 					<Text weight={'bold'}>{task.title}</Text>
@@ -82,6 +91,11 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 			</Card>
 		)
 	};
+
+	const { query } = router;
+	useEffect(() => {
+		if (query?.task) setIsTaskModalOpend(true);
+	}, [query]);
 
 	console.log({ tasks });
 	return (

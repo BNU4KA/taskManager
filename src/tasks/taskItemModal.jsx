@@ -1,58 +1,69 @@
-import React from "react";
-import {
-	Button,
-	Modal,
-	TextInput,
-	Group,
-} from '@mantine/core';
+import React, { useEffect } from "react";
+import { Modal, Title } from '@mantine/core';
 import { useRouter } from 'next/router';
+import { removeQueryParams } from '../constants/index';
+import { fetchTask } from "../slices/tasksSlice";
+import { connect } from 'react-redux';
 
-const TaskModal = ({ setOpened, opened, taskId, state }) => {
+const TaskModal = ({ setOpened, opened, task, fetchTask }) => {
 	const router = useRouter();
-	const { query: { task }, pathname } = router || {};
+	const { query: { task: taskId } } = router || {};
+	useEffect(() => {
+		const data = { taskId };
+		fetchTask(data);
+	});
+	console.log({ task });
     return (
         <Modal
 			opened={opened}
 			size="90%"
-			title={task}
+			title={<TaskTitle title={'Title'} />}
 			withCloseButton={false}
 			onClose={() => {
+				const url = removeQueryParams(router, 'task');
+				router.push(url);
 				setOpened(false);
-				router.push(pathname);
 			}}
 			centered
+			classNames={{
+  			//   root: 'your-root-class',
+  			//   inner: 'your-inner-class',
+  			  modal: 'task-modal-wrapper',
+  			//   header: 'your-header-class',
+  			//   title: 'your-title-class',
+  			  body: 'task-modal'
+  			}}
         >
-			{/* <TextInput
-				mt={'md'}
-				ref={taskTitle}
-				placeholder={'Task Title'}
-				required
-				label={'Title'}
-			/>
-			<TextInput
-				ref={taskSummary}
-				mt={'md'}
-				placeholder={'Task Summary'}
-				label={'Summary'}
-			/>
-			<Group mt={'md'} position={'apart'}>
-				<Button
-					onClick={() => {
-						setOpened(false);
-					}}
-					variant={'subtle'}>
-					Cancel
-				</Button>
-				<Button
-					onClick={() => {
-						createTask();
-						setOpened(false);
-					}}>
-					Create Task
-				</Button>
-			</Group> */}
+			<div className="task-modal-inner task-modal-inner__left">
+				qwe
+			</div>
+			<div className="task-modal-inner task-modal-inner__right">
+				asd
+			</div>
 		</Modal>
     );
 };
 
-export default TaskModal;
+const TaskTitle = ({ title = '' }) => {
+	return (
+		<Title sx={theme => ({
+				fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+				fontWeight: 900,
+			})}
+		>
+			{title}
+		</Title>
+	)
+}
+
+const mapStateToProps = ({
+  tasksSliceData: {
+    task,
+  },
+}) => ({ task });
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchTask: (data) => dispatch(fetchTask(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TaskModal);

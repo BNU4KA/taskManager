@@ -1,8 +1,10 @@
 import React from "react";
+import TasksPage from "../../src/tasks/TasksPage";
 
 const Index = () => {
     return (
-        <div>[project]</div>
+        <TasksPage />
+        // <div>[project]</div>
     )
 }
 

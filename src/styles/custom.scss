@@ -3,7 +3,7 @@
     width: 340px;
     margin: 10px 10px;
     border-radius: 10px;
-    // border: 2px dashed green;
+    cursor: pointer;
 
     &__add-new-project-wrapper {
         background-color: gray;
@@ -47,4 +47,24 @@
     padding-right: 0;
     margin-left: initial;
     margin-right: initial;
+}
+
+.task-modal-wrapper {
+    height: 95%;
+}
+
+.task-modal {
+    height: 100%;
+    display: flex;
+}
+
+.task-modal-inner {
+    overflow: auto;
+    
+    &__left {
+        width: 60%;
+    }
+    &__right {
+        width: 40%;
+    }
 }

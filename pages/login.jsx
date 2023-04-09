@@ -10,7 +10,6 @@ const Login = () => {
     const [loginState, setLoginState] = useState(initialState);
 
     const handleChange = useCallback(({ target: { name, value } }) => {
-        console.log(name, value);
         setLoginState((prevState) => ({ ...prevState, [name]: value }));
     }, []);
 

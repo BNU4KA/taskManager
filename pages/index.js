@@ -1,8 +1,8 @@
 import React from 'react';
-import ProjectPage from '../src/project/ProjectPage';
+import ProjectsPage from '../src/project/ProjectsPage';
 
 const Index = () => {
-    return <ProjectPage />
+    return <ProjectsPage />
 }
 
 export default Index;

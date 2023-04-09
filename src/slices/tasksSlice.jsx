@@ -5,10 +5,24 @@ import { noop } from 'lodash';
 
 const initialState = {
   tasks: [],
+  task: {},
   isTasksLoaded: false,
 };
 
 export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = noop }, { getState }) => {
+  try {
+    const response = await fetch(`/api/getJobList/`, { method: 'GET' });
+    const responseData = await response.json();
+    const { data } = responseData;
+    onSuccess(data);
+    return data;
+  } catch (err) {
+    console.log('fetch translation error', err);
+    return {};
+  }
+});
+
+export const fetchTask = createAsyncThunk('fetch/task', async ({ onSuccess = noop, taskId = 'qwe' }, { getState }) => {
   try {
     const response = await fetch(`/api/getJobList/`, { method: 'GET' });
     const responseData = await response.json();
@@ -45,6 +59,13 @@ const tasksSlice = createSlice({
         ...state,
         isTasksLoaded: true,
         tasks,
+      };
+    });
+    tasks.addCase(fetchTask.fulfilled, (state, { payload: { data: task } }) => {
+      return {
+        ...state,
+        isTasksLoaded: true,
+        task,
       };
     });
     tasks.addCase(deleteTaks.fulfilled, (state, { payload: { data: tasks } }) => {

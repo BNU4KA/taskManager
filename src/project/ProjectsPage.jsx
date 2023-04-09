@@ -3,10 +3,21 @@ import { Container, Title } from "@mantine/core";
 import ProjectItem from './ProjectItem';
 import { isEmpty } from 'lodash';
 
-const mockItems = [1, 2, 3, 4, 5];
+const mockItems = [
+    {
+        id: '12dqw3',
+        title: 'asd',
+        description: 'qweqweqweqwdeqbdewiudbwedbwei wfiuweo heufhwefh whoehf owehf'
+    },
+    {
+        id: 'dawqd21',
+        title: 'qwe',
+        description: 'qweqweqweqw wfiuweo heufhwefh whoehf owehf'
+    }
+];
 // const mockItems = [];
 
-const ProjectPage = ({ ProjectItems = mockItems }) => {
+const ProjectsPage = ({ ProjectItems = mockItems }) => {
 
     return (
         <Container size='90%' my={40}>
@@ -31,4 +42,4 @@ const ProjectPage = ({ ProjectItems = mockItems }) => {
     )
 }
 
-export default ProjectPage;
+export default ProjectsPage;
