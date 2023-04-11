@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
               {
                 pathname: '/[project]/',
                 query: {
-                  project: item.id,
+                  project: item?.projectId,
                 },
               },
               undefined,
@@ -26,14 +26,14 @@ import { useRouter } from 'next/router';
 			        	            fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 			        	            fontWeight: 900,
 			                    })}>
-                                    Title
+                                    {item?.title}
                                 </Title>
                                 <Title sx={theme => ({
 			        	            fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 			        	            fontWeight: 900,
                                     fontSize: '20px'
 			                    })}>
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                    {item?.description}
                                 </Title>
                             </div>
                         </div>

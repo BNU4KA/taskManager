@@ -21,6 +21,24 @@ import { noop } from 'lodash';
 
 const initialState = { title: '', description: '' };
 
+const qwe = [
+    {
+        "title": "task description",
+        "id": '122ws21',
+        "description": "Description"
+    },
+    {
+        "title": "qwe",
+        "id": '12wqe2q',
+        "description": "123"
+    },
+    {
+        "title": "123",
+        "id": '1dcws21',
+        "description": "123"
+    }
+];
+
 const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) => {
 	const [opened, setOpened] = useState(false);
 	const [state, setState] = useState(initialState);
@@ -64,7 +82,7 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
             	    pathname: '/[project]/',
             	    query: {
             	      project: router.query.project,
-            	      task: task.id,
+            	      task: task?.jobId,
             	    },
             	  },
             	  undefined,
@@ -97,7 +115,6 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 		if (query?.task) setIsTaskModalOpend(true);
 	}, [query]);
 
-	console.log({ tasks });
 	return (
 		<div>
 			{!isTasksLoaded && (

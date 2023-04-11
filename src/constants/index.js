@@ -1,6 +1,8 @@
 import { isArray } from "lodash";
 
-export const ROOT_API_URL = 'https://zalupa.by/';
+// export const ROOT_API_URL = 'https://zalupa.by/';
+// http://crimssondead-001-site1.ftempurl.com/taskmanager/api/Project/GetProjectList
+export const ROOT_API_URL = 'http://crimssondead-001-site1.ftempurl.com/taskmanager';
 
 export const removeQueryParams = (router, keysForRemove) => {
   const { asPath } = router;
