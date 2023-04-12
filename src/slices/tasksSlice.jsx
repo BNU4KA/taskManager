@@ -11,9 +11,9 @@ const initialState = {
   isProjectsLoaded: false,
 };
 
-export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = noop }, { getState }) => {
+export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = noop, projectId = 'qwe' }, { getState }) => {
   try {
-    const response = await fetch(`${ROOT_API_URL}/api/Job/list/`);
+    const response = await fetch(`${ROOT_API_URL}/api/Job/list?project=${projectId}`);
     const responseData = await response.json();
     onSuccess(responseData);
     return responseData;
@@ -35,14 +35,29 @@ export const fetchTask = createAsyncThunk('fetch/task', async ({ onSuccess = noo
   }
 });
 
-export const deleteTaks = createAsyncThunk('delete/task', async (payload, { getState }) => {
+export const deleteTask = createAsyncThunk('delete/task', async (payload, { getState }) => {
   try {
-    const { taskId } = payload;
-    const response = await fetch(`${ROOT_API_URL}/api/deleteJob/`, { body: taskId, method: 'DELETE' });
+    const { taskId, onSuccess = noop, title, description, projectId } = payload;
+    const response = await fetch(`${ROOT_API_URL}/api/Job/delete/`, { method: 'DELETE', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ JobId: taskId, Title: title, Description: description, ProjectRefId: projectId }) });
     const responseData = await response.json();
-    const { data } = responseData;
-    onSuccess(data);
-    return data;
+    onSuccess(responseData);
+    return { taskId };
+  } catch (err) {
+    console.log('fetch translation error', err);
+    return {};
+  }
+});
+
+export const createTask = createAsyncThunk('create/task', async (payload, { getState }) => {
+  try {
+    const { taskId, onSuccess = noop, title, description, projectId } = payload;
+    console.log('taskId', { taskId, title, description, projectId });
+    const response = await fetch(`${ROOT_API_URL}/api/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ job: 0, Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: 0, EndDate: 0, EstimetedTime: "", SpentTime: "", Progreess: "", JobRefId: "" }) });
+    console.log({ response });
+    const responseData = await response.json();
+    console.log({ responseData });
+    onSuccess(responseData);
+    return { taskId };
   } catch (err) {
     console.log('fetch translation error', err);
     return {};
@@ -52,13 +67,9 @@ export const deleteTaks = createAsyncThunk('delete/task', async (payload, { getS
 export const createProject = createAsyncThunk('create/Project', async (payload, { getState }) => {
   try {
     const { title, description } = payload;
-    console.log({ title, description });
-    // const response = await fetch(`${ROOT_API_URL}/api/Project/create/`, { method: "POST", headers: { Prefer: 'params=single-object', "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ ProjectId: '', Title: title, Description: description }) });
-    const response = await fetch(`${ROOT_API_URL}/api/Project/create/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ProjectId: '', Title: title, Description: description }) });
-    console.log(response);
+    const response = await fetch(`${ROOT_API_URL}/api/Project/create/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Title: title, Description: description }) });
     const responseData = await response.json();
     const { data } = responseData;
-    console.log({ response, responseData });
     onSuccess(data);
     return data;
   } catch (err) {
@@ -97,11 +108,11 @@ const tasksSlice = createSlice({
         task: payload,
       };
     });
-    tasks.addCase(deleteTaks.fulfilled, (state, { payload: { data: tasks } }) => {
+    tasks.addCase(deleteTask.fulfilled, (state, { payload: { taskId } }) => {
       return {
         ...state,
         isTasksLoaded: true,
-        tasks,
+        tasks: state?.tasks?.filter((item) => item?.id !== taskId),
       };
     });
     tasks.addCase(getProjects.fulfilled, (state, { payload }) => {

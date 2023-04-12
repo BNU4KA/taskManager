@@ -5,8 +5,9 @@ import {
 	TextInput,
 	Group,
 } from '@mantine/core';
+import { noop } from "lodash";
 
-const CreateTask = ({ setOpened, createTask, opened, state, handleChange }) => {
+const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, setOpened = noop }) => {
     return (
         <Modal
 			opened={opened}
@@ -47,7 +48,7 @@ const CreateTask = ({ setOpened, createTask, opened, state, handleChange }) => {
 				</Button>
 				<Button
 					onClick={() => {
-						createTask();
+						createTask({ state });
 						setOpened(false);
 					}}>
 					Create Task

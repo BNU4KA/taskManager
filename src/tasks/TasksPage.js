@@ -7,49 +7,35 @@ import {
 	Card,
 	ActionIcon,
 } from '@mantine/core';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { MoonStars, Sun, Trash } from 'tabler-icons-react';
 
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import TaskModal from './taskItemModal';
 import CreateTask from './createTaskModal';
 import { useRouter } from 'next/router';
-import { fetchTasks } from '../slices/tasksSlice';
+import { createTask, deleteTask, fetchTasks } from '../slices/tasksSlice';
 import { connect } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { noop } from 'lodash';
 
 const initialState = { title: '', description: '' };
 
-const qwe = [
-    {
-        "title": "task description",
-        "id": '122ws21',
-        "description": "Description"
-    },
-    {
-        "title": "qwe",
-        "id": '12wqe2q',
-        "description": "123"
-    },
-    {
-        "title": "123",
-        "id": '1dcws21',
-        "description": "123"
-    }
-];
-
-const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) => {
+const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDispatch = noop, tasksData = [], isTasksLoaded = false }) => {
 	const [opened, setOpened] = useState(false);
 	const [state, setState] = useState(initialState);
+	const [tasks, setTasks] = useState(tasksData);
 	const [isTaskModalOpend, setIsTaskModalOpend] = useState(false);
 	const router = useRouter(null);
-
-	const [tasks, setTasks] = useState(tasksData);
+	const { query } = router || {};
 
 	useEffect(() => {
-		fetchTasks({ onSuccess: setTasks });
-	}, []);
+		if (query?.task) setIsTaskModalOpend(true);
+	}, [query]);
+
+	useEffect(() => {
+		fetchTasks({ onSuccess: setTasks, projectId: query?.project });
+	}, [query]);
 
 	const [colorScheme, setColorScheme] = useLocalStorage({
 		key: 'mantine-color-scheme',
@@ -57,21 +43,26 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 		getInitialValueInEffect: true,
 	});
 
-	const toggleColorScheme = value =>
-		setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+	const toggleColorScheme = value => setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 	useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
 	const handleChange = ({ target: { name, value } }) => {
 		setState((prevState) => ({ ...prevState,  [name]: value }))
 	};
 
-	const onSubmit = () => {
-		
-	}
+	const onSubmit = () => {}
 
-	const deleteTask = ({ taskId }) => {
-		setTasks((prevState) => prevState.filter(({ id }) => taskId !== id));
-	};
+	const handleDeleteTask = useCallback(({ task }) => {
+		const { title, description, projectRefId, jobId, ...item } = task || {};
+		deleteTaskDispatch({ taskId: jobId, title, description, projectId: projectRefId });
+		setTasks((prevState) => prevState.filter(({ id }) => jobId !== id));
+	}, [tasks]);
+
+	const handleCreateTask = useCallback(({ state }) => {
+		const { project } = query;
+		const { title, description } = state || {};
+		createTaskDispatch({ title, description, projectId: project, onSuccess: setTasks });
+	}, [tasks]);
 
 	const TaskItem = ({ task, index }) => {
 		return (
@@ -94,10 +85,11 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 					<ActionIcon
 						onClick={(event) => {
 							event.stopPropagation();
-							deleteTask({ taskId: task.id });
+							handleDeleteTask({ task, taskId: task?.jobId });
 						}}
 						color={'red'}
-						variant={'transparent'}>
+						variant={'transparent'}
+					>
 						<Trash />
 					</ActionIcon>
 				</Group>
@@ -109,11 +101,6 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 			</Card>
 		)
 	};
-
-	const { query } = router;
-	useEffect(() => {
-		if (query?.task) setIsTaskModalOpend(true);
-	}, [query]);
 
 	return (
 		<div>
@@ -132,7 +119,7 @@ const TaskPage = ({ fetchTasks = noop, tasksData = [], isTasksLoaded = false }) 
 				</div>
 			)}
 				<div className='App'>
-					<CreateTask setOpened={setOpened} state={state} createTask={() => {}} opened={opened} handleChange={handleChange} />
+					<CreateTask setOpened={setOpened} state={state} createTask={handleCreateTask} opened={opened} handleChange={handleChange} />
 					<TaskModal opened={isTaskModalOpend} state={state} setOpened={setIsTaskModalOpend} handleChange={handleChange} />
 					<Container size={550} my={40}>
 						<Group position={'apart'}>
@@ -184,6 +171,8 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchTasks: (data) => dispatch(fetchTasks(data)),
+  deleteTaskDispatch: (data) => dispatch(deleteTask(data)),
+  createTaskDispatch: (data) => dispatch(createTask(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskPage);

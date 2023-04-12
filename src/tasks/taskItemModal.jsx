@@ -6,6 +6,7 @@ import { fetchTask } from "../slices/tasksSlice";
 import { connect } from 'react-redux';
 import { isEmpty } from "lodash";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 const TaskModal = ({ setOpened, opened, task, fetchTask }) => {
 	const router = useRouter();
@@ -18,8 +19,6 @@ const TaskModal = ({ setOpened, opened, task, fetchTask }) => {
 
 	const { title, description, status, startDate, endDate, progreess, spentTime, jobId, estimetedTime } = taskData || {};
 
-	console.log(task);
-
 	// const DateElement = (date) => <DatePicker selected={isUndefined(date) ? new Date() : new Date(date)} onChange={noop} />
 	const getStatus = (status) => {
 		if (status === 0) return 'discussion'
@@ -30,12 +29,20 @@ const TaskModal = ({ setOpened, opened, task, fetchTask }) => {
 
 	const HeaderItem = () => {
 		return (
-			<div style={{ display: 'block' }}>
-				<div>
-					<TaskTitle text={title} />
+			<div style={{ display: 'flex' }}>
+				<div style={{ display: 'block' }}>
+					<div>
+						<TaskTitle text={title} />
+					</div>
+					<div>
+						<TaskTitle weight={600} size={25} text={`Status: ${getStatus(status)}`} />
+					</div>
 				</div>
-				<div>
-					<TaskTitle weight={600} size={25} text={`Status: ${getStatus(status)}`} />
+				<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+					<div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'space-between' }}>
+						<TaskTitle weight={600} size={25} text={`Start date: ${moment(startDate).format("LL")}`} />
+						<TaskTitle weight={600} size={25} text={`End date: ${moment(endDate).format("LL")}`} />
+					</div>
 				</div>
 			</div>
 		)
@@ -64,8 +71,8 @@ const TaskModal = ({ setOpened, opened, task, fetchTask }) => {
 				</div>
 				<div className="task-modal-inner__left__progress">
 					<div>progress</div>
-					{/* <input type='range' value={progreess} min="0" max="100"/> */}
-					<Progress style={{ width: '85%', margin: '3px 0 0 10px' }} value={progreess}/>
+					<input type='range' value={progreess} min="0" max="100"/>
+					{/* <Progress style={{ width: '85%', margin: '3px 0 0 10px' }} value={progreess}/> */}
 				</div>
 				{/* <div className="task-modal-inner__left__progress">
 					<div>Start Date: {new Date(startDate).toISOString}</div>
@@ -89,8 +96,9 @@ const TaskTitle = ({ text = '', weight = 900, size = 34, isEditble = false }) =>
 				fontSize: size,
 			})}
 			>
-				{isEditble ? <TextInput value={text} /> : text}
+				{!isEditble && text}
 			</Title>
+			{isEditble && <textarea style={{ width: '100%', height: '100%', resize: 'none' }} value={text} />}
 		</>
 	)
 }
