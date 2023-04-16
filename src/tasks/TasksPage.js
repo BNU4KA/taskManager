@@ -19,7 +19,8 @@ import { connect } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { noop } from 'lodash';
 
-const initialState = { title: '', description: '' };
+const initialState = { title: '', description: '', endDate: new Date() };
+// EstimetedTime: 10, SpentTime: 5, progreess: 123, JobRefId: ""
 
 const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDispatch = noop, tasksData = [], isTasksLoaded = false }) => {
 	const [opened, setOpened] = useState(false);
@@ -33,8 +34,10 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 		if (query?.task) setIsTaskModalOpend(true);
 	}, [query]);
 
+	const handleFetchTasks = useCallback(() => fetchTasks({ onSuccess: setTasks, projectId: query?.project }), []);
+
 	useEffect(() => {
-		fetchTasks({ onSuccess: setTasks, projectId: query?.project });
+		handleFetchTasks()
 	}, [query]);
 
 	const [colorScheme, setColorScheme] = useLocalStorage({
@@ -47,6 +50,7 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 	useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
 	const handleChange = ({ target: { name, value } }) => {
+		console.log({ name, value });
 		setState((prevState) => ({ ...prevState,  [name]: value }))
 	};
 
@@ -54,14 +58,13 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 
 	const handleDeleteTask = useCallback(({ task }) => {
 		const { title, description, projectRefId, jobId, ...item } = task || {};
-		deleteTaskDispatch({ taskId: jobId, title, description, projectId: projectRefId });
-		setTasks((prevState) => prevState.filter(({ id }) => jobId !== id));
+		deleteTaskDispatch({ taskId: jobId, title, description, projectId: projectRefId, tasks, onSuccess: setTasks });
 	}, [tasks]);
 
 	const handleCreateTask = useCallback(({ state }) => {
 		const { project } = query;
-		const { title, description } = state || {};
-		createTaskDispatch({ title, description, projectId: project, onSuccess: setTasks });
+		const { title, description, endDate } = state || {};
+		createTaskDispatch({ title, description, projectId: project, onSuccess: handleFetchTasks, endDate });
 	}, [tasks]);
 
 	const TaskItem = ({ task, index }) => {
@@ -120,7 +123,7 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 			)}
 				<div className='App'>
 					<CreateTask setOpened={setOpened} state={state} createTask={handleCreateTask} opened={opened} handleChange={handleChange} />
-					<TaskModal opened={isTaskModalOpend} state={state} setOpened={setIsTaskModalOpend} handleChange={handleChange} />
+					<TaskModal opened={isTaskModalOpend} setOpened={setIsTaskModalOpend} handleChange={handleChange} />
 					<Container size={550} my={40}>
 						<Group position={'apart'}>
 							<Title

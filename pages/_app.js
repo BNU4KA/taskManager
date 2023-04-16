@@ -1,4 +1,5 @@
 import '../src/styles/custom.scss';
+import '../src/styles/Dropdown.scss';
 import { Logout } from 'tabler-icons-react';
 import { ReduxWrapper } from '../src/store';
 import Login from './login';

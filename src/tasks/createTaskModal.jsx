@@ -1,14 +1,31 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import {
 	Button,
 	Modal,
 	TextInput,
 	Group,
+	Textarea,
 } from '@mantine/core';
 import { noop } from "lodash";
+import DatePicker from "react-datepicker";
 
 const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, setOpened = noop }) => {
-    return (
+    console.log({ state });
+	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+		<>
+			<div className="mantine-InputWrapper-root mantine-TextInput-root mantine-1l2unfb">
+				<label className="mantine-InputWrapper-label mantine-TextInput-label mantine-1hwfu2">
+					Due Date
+				</label>
+				<div className="mantine-Input-wrapper mantine-TextInput-wrapper mantine-12sbrde">
+				<button className="mantine-Input-input mantine-TextInput-input mantine-1r06dai" onClick={onClick} ref={ref}>
+      				{value}
+    			</button>
+			</div>
+			</div>
+		</>
+  	));
+	return (
         <Modal
 			opened={opened}
 			size={'md'}
@@ -29,14 +46,19 @@ const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, set
 				label={'Title'}
 				type='text'
 			/>
-			<TextInput
+			<Textarea
 				value={state.description}
 				name='description'
 				onChange={(event) => handleChange(event)}
-				mt={'md'}
 				placeholder={'Task Description'}
 				label={'Description'}
 				type='text'
+				autosize
+			/>
+			<DatePicker 
+				selected={state.endDate} 
+				onChange={(date) => handleChange({ target: { name: 'endDate', value: date } })}
+				customInput={<ExampleCustomInput />} 
 			/>
 			<Group mt={'md'} position={'apart'}>
 				<Button

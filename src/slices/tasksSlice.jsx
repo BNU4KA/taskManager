@@ -13,6 +13,7 @@ const initialState = {
 
 export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = noop, projectId = 'qwe' }, { getState }) => {
   try {
+    // if (projectId === 'qwe') return [];
     const response = await fetch(`${ROOT_API_URL}/api/Job/list?project=${projectId}`);
     const responseData = await response.json();
     onSuccess(responseData);
@@ -25,6 +26,7 @@ export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = n
 
 export const fetchTask = createAsyncThunk('fetch/task', async ({ onSuccess = noop, taskId = 'qwe' }, { getState }) => {
   try {
+    // if (taskId === 'qwe') return {};
     const response = await fetch(`${ROOT_API_URL}/api/Job/item?id=${taskId}`);
     const responseData = await response.json();
     onSuccess(responseData);
@@ -37,10 +39,10 @@ export const fetchTask = createAsyncThunk('fetch/task', async ({ onSuccess = noo
 
 export const deleteTask = createAsyncThunk('delete/task', async (payload, { getState }) => {
   try {
-    const { taskId, onSuccess = noop, title, description, projectId } = payload;
-    const response = await fetch(`${ROOT_API_URL}/api/Job/delete/`, { method: 'DELETE', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ JobId: taskId, Title: title, Description: description, ProjectRefId: projectId }) });
-    const responseData = await response.json();
-    onSuccess(responseData);
+    const { taskId, onSuccess = noop, tasks } = payload;
+    await fetch(`${ROOT_API_URL}/api/Job/delete/`, { method: 'DELETE', headers: { "Content-Type": "application/json" }, body: JSON.stringify(taskId) });
+    const updatedState = tasks?.filter((item) => item?.jobId !== taskId);
+    onSuccess(updatedState);
     return { taskId };
   } catch (err) {
     console.log('fetch translation error', err);
@@ -50,14 +52,11 @@ export const deleteTask = createAsyncThunk('delete/task', async (payload, { getS
 
 export const createTask = createAsyncThunk('create/task', async (payload, { getState }) => {
   try {
-    const { taskId, onSuccess = noop, title, description, projectId } = payload;
+    const { taskId, onSuccess = noop, title, description, projectId, endDate } = payload;
     console.log('taskId', { taskId, title, description, projectId });
-    const response = await fetch(`${ROOT_API_URL}/api/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ job: 0, Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: 0, EndDate: 0, EstimetedTime: "", SpentTime: "", Progreess: "", JobRefId: "" }) });
-    console.log({ response });
-    const responseData = await response.json();
-    console.log({ responseData });
-    onSuccess(responseData);
-    return { taskId };
+    await fetch(`${ROOT_API_URL}/api/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: 0, EndDate: endDate, EstimetedTime: 10, SpentTime: 5, progreess: 80, JobRefId: "" }) });
+    onSuccess();
+    return { taskId, title, description, projectId };
   } catch (err) {
     console.log('fetch translation error', err);
     return {};
@@ -108,11 +107,13 @@ const tasksSlice = createSlice({
         task: payload,
       };
     });
-    tasks.addCase(deleteTask.fulfilled, (state, { payload: { taskId } }) => {
+    tasks.addCase(deleteTask.fulfilled, (state, { payload }) => {
+      const { taskId } = payload || {};
+      const updatedState = state?.tasks?.filter((item) => item?.jobId !== taskId);
       return {
         ...state,
         isTasksLoaded: true,
-        tasks: state?.tasks?.filter((item) => item?.id !== taskId),
+        tasks: updatedState,
       };
     });
     tasks.addCase(getProjects.fulfilled, (state, { payload }) => {
@@ -120,6 +121,13 @@ const tasksSlice = createSlice({
         ...state,
         isProjectsLoaded: true,
         projects: payload,
+      };
+    });
+    tasks.addCase(createTask.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        tasks: [...state.tasks, payload],
+        isTasksLoaded: true,
       };
     });
   },
