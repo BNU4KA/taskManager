@@ -15,6 +15,7 @@ export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = n
   try {
     // if (projectId === 'qwe') return [];
     const response = await fetch(`${ROOT_API_URL}/api/Job/list?project=${projectId}`);
+    // const response = await fetch(`${ROOT_API_URL}/api/Job/list`, { method: 'GET', headers: { "Content-Type": "application/json" }, body: JSON.stringify(projectId) });
     const responseData = await response.json();
     onSuccess(responseData);
     return responseData;
@@ -24,7 +25,7 @@ export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = n
   }
 });
 
-export const fetchTask = createAsyncThunk('fetch/task', async ({ onSuccess = noop, taskId = 'qwe' }, { getState }) => {
+export const fetchTask = createAsyncThunk('fetch/task', async ({ onSuccess = noop, taskId = '' }, { getState }) => {
   try {
     // if (taskId === 'qwe') return {};
     const response = await fetch(`${ROOT_API_URL}/api/Job/item?id=${taskId}`);
@@ -53,8 +54,8 @@ export const deleteTask = createAsyncThunk('delete/task', async (payload, { getS
 export const createTask = createAsyncThunk('create/task', async (payload, { getState }) => {
   try {
     const { taskId, onSuccess = noop, title, description, projectId, endDate } = payload;
-    console.log('taskId', { taskId, title, description, projectId });
-    await fetch(`${ROOT_API_URL}/api/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: 0, EndDate: endDate, EstimetedTime: 10, SpentTime: 5, progreess: 80, JobRefId: "" }) });
+    await fetch(`${ROOT_API_URL}/api/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: 0, EndDate: endDate, EstimetedTime: 10, SpentTime: 5, progress: 0, JobRefId: "" }) });
+    // await fetch(`${ROOT_API_URL}/api/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title, description, projectRefId: projectId, startDate: new Date(), status: 0, endDate: endDate, estimetedTime: 10, spentTime: 5, progress: 0, jobRefId: "" }) });
     onSuccess();
     return { taskId, title, description, projectId };
   } catch (err) {
@@ -83,6 +84,19 @@ export const getProjects = createAsyncThunk('get/Projects', async ({ onSuccess =
     const responseData = await response.json();
     onSuccess(responseData);
     return responseData;
+  } catch (err) {
+    console.log('fetch translation error', err);
+    return {};
+  }
+});
+
+export const updateTask = createAsyncThunk('update/task', async (payload, { getState }) => {
+  try {
+    const { taskId, onSuccess = noop, title, description, projectRefId: projectId, endDate, jobId, progress, status } = payload;
+    console.log('taskId', { taskId, title, description, projectId });
+    await fetch(`${ROOT_API_URL}/api/Job/update/`, { method: 'PUT', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: status, EndDate: endDate, EstimetedTime: 10, SpentTime: 5, progress, JobRefId: "", jobId }) });
+    onSuccess();
+    return { taskId, title, description, projectId };
   } catch (err) {
     console.log('fetch translation error', err);
     return {};

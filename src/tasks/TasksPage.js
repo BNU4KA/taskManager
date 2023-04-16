@@ -20,7 +20,6 @@ import { SpinnerDotted } from 'spinners-react';
 import { noop } from 'lodash';
 
 const initialState = { title: '', description: '', endDate: new Date() };
-// EstimetedTime: 10, SpentTime: 5, progreess: 123, JobRefId: ""
 
 const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDispatch = noop, tasksData = [], isTasksLoaded = false }) => {
 	const [opened, setOpened] = useState(false);
@@ -50,7 +49,6 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 	useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
 	const handleChange = ({ target: { name, value } }) => {
-		console.log({ name, value });
 		setState((prevState) => ({ ...prevState,  [name]: value }))
 	};
 
@@ -65,6 +63,7 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 		const { project } = query;
 		const { title, description, endDate } = state || {};
 		createTaskDispatch({ title, description, projectId: project, onSuccess: handleFetchTasks, endDate });
+		setState(initialState);
 	}, [tasks]);
 
 	const TaskItem = ({ task, index }) => {

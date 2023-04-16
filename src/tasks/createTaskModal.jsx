@@ -10,7 +10,6 @@ import { noop } from "lodash";
 import DatePicker from "react-datepicker";
 
 const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, setOpened = noop }) => {
-    console.log({ state });
 	const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
 		<>
 			<div className="mantine-InputWrapper-root mantine-TextInput-root mantine-1l2unfb">

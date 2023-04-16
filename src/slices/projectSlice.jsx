@@ -24,7 +24,6 @@ export const deleteTaks = createAsyncThunk('delete/task', async (payload, { getS
     const { taskId } = payload;
     const response = await fetch(`/api/deleteJob/`, { body: taskId, method: 'DELETE' });
     const responseData = await response.json();
-    console.log({ response, responseData });
     const { data } = responseData;
     onSuccess(data);
     return data;

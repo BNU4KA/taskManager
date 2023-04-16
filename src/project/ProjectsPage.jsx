@@ -36,15 +36,16 @@ const ProjectsPage = ({ ProjectItems = mockItems, getProjectsFunc, projectsData,
 			    	sx={theme => ({
 			    		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 			    		fontWeight: 900,
-			    	})}>
+			    	})}
+                    >
 			    	    Welcom to TaskManger
 			    </ Title>
             </ Container>
             <Container className='content-wrapper'>
                 {!isEmpty(projects) && projects.map((item) => <ProjectItem item={item} />)}
-                <div className='project-item project-item__add-new-project-wrapper' onClick={() => setOpened(true)}>
+                {/* <div className='project-item project-item__add-new-project-wrapper' onClick={() => setOpened(true)}>
                     <div className='project-item project-item__add-new-project' />
-                </div>
+                </div> */}
             </Container>
             <CreateProject setOpened={setOpened} opened={opened} />
         </Container>

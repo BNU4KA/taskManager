@@ -1,8 +1,11 @@
 .project-item {
     height: 400px;
-    width: 340px;
+    width: 444px;
     margin: 10px 10px;
     border-radius: 10px;
+    background-color: #653fc43f;
+    // border: 1px solid white;
+    // box-shadow: #23a6d5 1px;
     cursor: pointer;
 
     &__add-new-project-wrapper {
@@ -24,9 +27,9 @@
         position: absolute;
         display: flex;
         width: 100%;
-        height: 60%;
-        background-color: aliceblue;
+        height: 100%;
         bottom: 0;
+        border-radius: 10px;
         flex-direction: column;
     }
 
@@ -78,17 +81,19 @@
         }
     }
     &__right {
-        width: 30%;
+        width: 35%;
+        padding: 0 10px;
     }
 }
 
 .status-bar {
     height: 30px;
-    width: 151px;
+    width: 155px;
     padding: 17px;
     display: flex;
     background-color: antiquewhite;
     border-radius: 3px;
+    // border: 1px solid white;
     align-items: center;
     justify-content: center;
     color: black;
@@ -102,7 +107,7 @@
 }
 
 .check-box {
-    border: 2px solid #555151;
+    border: 2px solid green;
     margin: 0 5px 0 15px;
     width: 27px;
     color: aliceblue;
@@ -112,6 +117,7 @@
     cursor: pointer;
     &__svg {
         padding: 10px;
+        color: green;
     }
 }
 
@@ -128,7 +134,7 @@
     &__new {
         z-index: 100;
         position: absolute;
-        top: 35px;
+        top: 20px;
         border: dashed 1px rgb(170, 154, 154);
         margin: 0 25px;
         display: flex;
@@ -199,4 +205,22 @@
     width: 100%;
     height: 36px;
     margin: 0 0 0 10px;
+}
+
+.pr-page-wrapper {
+    color: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }

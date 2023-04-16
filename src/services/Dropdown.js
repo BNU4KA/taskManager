@@ -24,12 +24,13 @@ const Dropdown = ({
   onChange,
   value,
 }) => {
-  console.log(value);
   const [showMenu, setShowMenu] = useState(false);
   const [selectedValue, setSelectedValue] = useState(isMulti ? [] : value);
   const [searchValue, setSearchValue] = useState("");
   const searchRef = useRef();
   const inputRef = useRef();
+
+  useEffect(() => setSelectedValue(value), [value]);
 
   useEffect(() => {
     setSearchValue("");

@@ -24,13 +24,15 @@
     max-height: 150px;
     background-color: #fff;
     z-index: 99;
-    width: 151px;
+    width: 155px;
     left: 35px;
 }
 
 .dropdown-item {
     padding: 5px;
     cursor: pointer;
+    color: black;
+    background-color: white;
     text-align: center;
 }
 
