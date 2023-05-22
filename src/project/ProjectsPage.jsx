@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Title } from "@mantine/core";
+import { Container, Title, Text } from "@mantine/core";
 import ProjectItem from './ProjectItem';
 import { isEmpty, noop } from 'lodash';
 import CreateProject from './createProjectModal';
@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { getProjects } from '../slices/tasksSlice';
 import { useEffect } from 'react';
+import { getRandomInt } from '../constants';
 
 const mockItems = [
     {
@@ -38,8 +39,11 @@ const ProjectsPage = ({ ProjectItems = mockItems, getProjectsFunc, projectsData,
 			    		fontWeight: 900,
 			    	})}
                     >
-			    	    Welcom to TaskManger
+			    	    {/* Welcom to TaskManger */}
+                        Добро пожаловать в Таск Менеджер.
 			    </ Title>
+                {/* <Text color={'dimmed'} size={'md'} mt={'sm'}>Progress for all projects & tasks: {<b style={{ color: 'white' }}>{getRandomInt(101)}%</b>}</Text> */}
+                <Text color={'dimmed'} size={'md'} mt={'sm'}>Прогресс по всем задачам и проектам: {<b style={{ color: 'Black' }}>{getRandomInt(101)}%</b>}</Text>
             </ Container>
             <Container className='content-wrapper'>
                 {!isEmpty(projects) && projects.map((item) => <ProjectItem item={item} />)}

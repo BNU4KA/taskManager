@@ -130,7 +130,8 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 									fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 									fontWeight: 900,
 								})}>
-								Weekly tasks
+								{/* Weekly tasks */}
+								Текущие задачи
 							</Title>
 							<ActionIcon
 								color={'blue'}

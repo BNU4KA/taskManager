@@ -1,19 +1,35 @@
 import React from 'react';
 import {
-	Button,
-	Container,
 	Text,
 	Title,
 	Group,
 	Card,
 	ActionIcon,
     Skeleton, 
+    RingProgress
 } from '@mantine/core';
-import { MoonStars, Sun, Trash } from 'tabler-icons-react';
+import { Trash } from 'tabler-icons-react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { noop } from 'lodash';
+import { getRandomInt } from '../constants';
 
+const Progress = () => {
+    return <RingProgress
+      size={70}
+      thickness={13}
+      label={
+        <Text size="xs" align="center">
+          {/* Application data usage */}
+        </Text>
+      }
+      sections={[
+        { value: getRandomInt(100), color: 'cyan', tooltip: 'disscution' },
+        { value: getRandomInt(100), color: 'orange', tooltip: 'in progress' },
+        { value: getRandomInt(100), color: 'grape', tooltip: 'complete' },
+      ]}
+    />
+}
     const ProjectItem = ({ item }) => {
         const router = useRouter();
         const switchSectionByQuery = () =>
@@ -28,12 +44,12 @@ import { noop } from 'lodash';
               { shallow: true }
             );
             
-        const ProjectItemTemplate = ({ title, description }) => {
+        const ProjectItemTemplate = ({ title, description, progress = 101 }) => {
 		return (
 	    		<Card withBorder style={{ cursor: 'pointer', width: '400px', margin: '10px' }} mt={'sm'} onClick={() => switchSectionByQuery()}>
 	    			<Group position={'apart'}>
-	    				<Text weight={'bold'}>{title}</Text>
-	    				<ActionIcon
+	    				<Text fz="xl" weight={'bold'}>{title}</Text>
+	    				{/* <ActionIcon
 	    					onClick={(event) => {
 	    						event.stopPropagation();
                                 noop();
@@ -42,8 +58,13 @@ import { noop } from 'lodash';
 	    					variant={'transparent'}
 	    				>
 	    					<Trash />
-	    				</ActionIcon>
+	    				</ActionIcon> */}
+                        <Progress />
 	    			</Group>
+            <Text color={'dimmed'} size={'md'} mt={'sm'}>
+	    				{/* Project progress: {<b style={{ color: 'white' }}>{getRandomInt(progress)}%</b>} */}
+	    				Прогресс выполнения проекта: {<b style={{ color: 'black' }}>{getRandomInt(progress)}%</b>}
+	    			</Text>
 	    			<Text color={'dimmed'} size={'md'} mt={'sm'}>
 	    				{description
 	    					? description

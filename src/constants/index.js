@@ -15,3 +15,7 @@ export const removeQueryParams = (router, keysForRemove) => {
 
   return `${href}?${updatedPath.toString()}`;
 };
+
+export function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}

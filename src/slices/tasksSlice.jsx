@@ -13,9 +13,7 @@ const initialState = {
 
 export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = noop, projectId = 'qwe' }, { getState }) => {
   try {
-    // if (projectId === 'qwe') return [];
     const response = await fetch(`${ROOT_API_URL}/api/Job/list?project=${projectId}`);
-    // const response = await fetch(`${ROOT_API_URL}/api/Job/list`, { method: 'GET', headers: { "Content-Type": "application/json" }, body: JSON.stringify(projectId) });
     const responseData = await response.json();
     onSuccess(responseData);
     return responseData;

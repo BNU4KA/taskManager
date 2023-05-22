@@ -69,8 +69,8 @@ const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTas
 		{ value: 3, label: 'complete' }
 	];
 
-	// const assignUsers = [{ name: 'mikita', surname: 'malashevich', id: 1 }, { name: 'kirill', surname: 'dubanevich', id: 2 }, { name: 'SSSr4nk', surname: 'ZXC', id: 3 }];
-	const assignUsers = [{ name: 'mikita', surname: 'malashevich', id: 1 }];
+	const assignUsers = [{ name: 'mikita', surname: '1', id: 1 }, { name: 'kirill', surname: 'dubanevich', id: 2 }, { name: 'SSSr4nk', surname: 'ZXC', id: 3 }];
+	// const assignUsers = [{ name: 'mikita', surname: 'malashevich', id: 1 }];
 	// const assignUsers = [];
 
 	const AssignedUsers = useCallback((item) => {
