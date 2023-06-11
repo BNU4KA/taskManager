@@ -24,7 +24,7 @@ const colorsArray = [
 	'Blue'
 ];
 
-const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTaskDispatch = noop }) => {
+const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTaskDispatch = noop, isUser = true }) => {
 	const router = useRouter();
 	const { query: { task: taskId } } = router || {};
 	const [taskDataState, setTaskData] = useState(task);
@@ -164,9 +164,9 @@ const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTas
         >
 			<div className="task-modal-inner task-modal-inner__left">
 				<div className="task-modal-inner__left__description">
-					<TaskTitle onChange={(event) => handleChange(event)} text={taskDataState?.title} weight={500} size={30} />
+					<TaskTitle onChange={(event) => handleChange(event)} text={taskDataState?.title} weight={500} size={30} isUser={isUser} />
 					<div style={{ height: '20px' }} />
-					<TaskTitle onChange={(event) => handleChange(event)} text={taskDataState?.description} weight={500} size={20} isEditble/>
+					<TaskTitle onChange={(event) => handleChange(event)} text={taskDataState?.description} weight={500} size={20} isEditble isUser={isUser}/>
 				</div>
 				<div className="task-modal-inner__left__progress">
 					<TextInput
@@ -175,6 +175,7 @@ const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTas
 						name='progress' //кирилл, пидарасище, переименуй наконец-то это ебучее поле без ошибки
 						onChange={(event) => handleChange(event)}
 						type='text'
+						disabled={isUser}
 					/>
 					<Progress classNames={{
 						root: 'full-width',
@@ -204,7 +205,7 @@ const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTas
     );
 };
 
-const TaskTitle = ({ text = '', weight = 900, size = 34, isEditble = false, onChange = noop }) => {
+const TaskTitle = ({ text = '', weight = 900, size = 34, isEditble = false, onChange = noop, isUser }) => {
 	return (
 		<>
 			{isEditble ? (
@@ -215,6 +216,7 @@ const TaskTitle = ({ text = '', weight = 900, size = 34, isEditble = false, onCh
 					placeholder={'Task Description'}
 					type='text'
 					autosize
+					disabled={isUser}
 				/>
 			) : (
 				<TextInput
@@ -225,6 +227,7 @@ const TaskTitle = ({ text = '', weight = 900, size = 34, isEditble = false, onCh
 					placeholder={'Task Title'}
 					required
 					type='text'
+					disabled={isUser}
 				/>
 				)
 			}

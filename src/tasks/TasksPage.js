@@ -15,9 +15,9 @@ import TaskModal from './taskItemModal';
 import CreateTask from './createTaskModal';
 import { useRouter } from 'next/router';
 import { createTask, deleteTask, fetchTasks } from '../slices/tasksSlice';
-import { connect } from 'react-redux';
 import { SpinnerDotted } from 'spinners-react';
 import { noop } from 'lodash';
+import { connect, useSelector } from 'react-redux';
 
 const initialState = { title: '', description: '', endDate: new Date() };
 
@@ -29,6 +29,8 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 	const router = useRouter(null);
 	const { query } = router || {};
 
+	const { user: { role } } = useSelector((store) => store.userData);
+
 	useEffect(() => {
 		if (query?.task) setIsTaskModalOpend(true);
 	}, [query]);
@@ -36,7 +38,8 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 	const handleFetchTasks = useCallback(() => fetchTasks({ onSuccess: setTasks, projectId: query?.project }), []);
 
 	useEffect(() => {
-		handleFetchTasks()
+		console.log({ q1: query?.project });
+		fetchTasks({ onSuccess: setTasks, projectId: query?.project });
 	}, [query]);
 
 	const [colorScheme, setColorScheme] = useLocalStorage({
@@ -44,6 +47,7 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 		defaultValue: 'light',
 		getInitialValueInEffect: true,
 	});
+
 
 	const toggleColorScheme = value => setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 	useHotkeys([['mod+J', () => toggleColorScheme()]]);
@@ -84,7 +88,7 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 			}}>
 				<Group position={'apart'}>
 					<Text weight={'bold'}>{task.title}</Text>
-					<ActionIcon
+					{role !== 'User' && (<ActionIcon
 						onClick={(event) => {
 							event.stopPropagation();
 							handleDeleteTask({ task, taskId: task?.jobId });
@@ -93,7 +97,7 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 						variant={'transparent'}
 					>
 						<Trash />
-					</ActionIcon>
+					</ActionIcon>)}
 				</Group>
 				<Text color={'dimmed'} size={'md'} mt={'sm'}>
 					{task.description
@@ -122,7 +126,7 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 			)}
 				<div className='App'>
 					<CreateTask setOpened={setOpened} state={state} createTask={handleCreateTask} opened={opened} handleChange={handleChange} />
-					<TaskModal opened={isTaskModalOpend} setOpened={setIsTaskModalOpend} handleChange={handleChange} />
+					<TaskModal opened={isTaskModalOpend} setOpened={setIsTaskModalOpend} handleChange={handleChange} isUser={role === 'User'} />
 					<Container size={550} my={40}>
 						<Group position={'apart'}>
 							<Title
@@ -151,14 +155,14 @@ const TaskPage = ({ fetchTasks = noop, deleteTaskDispatch = noop, createTaskDisp
 								You have no tasks
 							</Text>
 						)}
-						<Button
+						{role !== 'User' && (<Button
 							onClick={() => {
 								setOpened(true);
 							}}
 							fullWidth
 							mt={'md'}>
-							New Task
-						</Button>
+							Новая Задача
+						</Button>)}
 					</Container>
 				</div>
 		</div>

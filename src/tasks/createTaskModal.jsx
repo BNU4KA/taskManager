@@ -14,7 +14,7 @@ const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, set
 		<>
 			<div className="mantine-InputWrapper-root mantine-TextInput-root mantine-1l2unfb">
 				<label className="mantine-InputWrapper-label mantine-TextInput-label mantine-1hwfu2">
-					Due Date
+					До Даты
 				</label>
 				<div className="mantine-Input-wrapper mantine-TextInput-wrapper mantine-12sbrde">
 				<button className="mantine-Input-input mantine-TextInput-input mantine-1r06dai" onClick={onClick} ref={ref}>
@@ -28,7 +28,7 @@ const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, set
         <Modal
 			opened={opened}
 			size={'md'}
-			title={'New Task'}
+			title={'Новая Задача'}
 			withCloseButton={false}
 			onClose={() => {
 				setOpened(false);
@@ -40,17 +40,17 @@ const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, set
 				value={state.title}
 				name='title'
 				onChange={(event) => handleChange(event)}
-				placeholder={'Task Title'}
+				placeholder={'Название Задачи'}
 				required
-				label={'Title'}
+				label={'Название'}
 				type='text'
 			/>
 			<Textarea
 				value={state.description}
 				name='description'
 				onChange={(event) => handleChange(event)}
-				placeholder={'Task Description'}
-				label={'Description'}
+				placeholder={'Описание Задачи'}
+				label={'Описание'}
 				type='text'
 				autosize
 			/>
@@ -65,14 +65,14 @@ const CreateTask = ({ opened, state, handleChange = noop, createTask = noop, set
 						setOpened(false);
 					}}
 					variant={'subtle'}>
-					Cancel
+					Отменить
 				</Button>
 				<Button
 					onClick={() => {
 						createTask({ state });
 						setOpened(false);
 					}}>
-					Create Task
+					Создать задачу
 				</Button>
 			</Group>
 		</Modal>

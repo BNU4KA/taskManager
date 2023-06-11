@@ -32,9 +32,9 @@ const CreateProject = ({ setOpened, opened, createProjectFunc }) => {
 				value={state?.title}
 				name='title'
 				onChange={(event) => handleChange(event)}
-				placeholder={'Project Title'}
+				placeholder={'Название проекта'}
 				required
-				label={'Title'}
+				label={'Название'}
 				type='text'
 			/>
 			<TextInput

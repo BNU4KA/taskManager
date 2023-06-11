@@ -8,6 +8,10 @@ import {
 	MantineProvider,
 } from '@mantine/core';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchUser } from '../src/slices/userSlice';
+import { useRouter } from 'next/router';
 
 const App = ({ Component }) => {
 const [colorScheme, setColorScheme] = useLocalStorage({
@@ -16,9 +20,18 @@ const [colorScheme, setColorScheme] = useLocalStorage({
 		getInitialValueInEffect: true,
 	});
 
+	const { isUserLoaded } = useSelector((store) => store.userData);
 	const toggleColorScheme = value =>
 		setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 	useHotkeys([['mod+J', () => toggleColorScheme()]]);
+
+	const dispatch = useDispatch();
+	const router = useRouter();
+	useEffect(() => {
+		if (document.cookie.replace('userId=', '') === '') router.push('/login')
+		console.log('qwe', document.cookie.replace('userId=', ''));
+		if (!isUserLoaded) dispatch(fetchUser({ userId: document.cookie.replace('userId=', '') }));
+    }, []);
 
 	return (
 		<ColorSchemeProvider

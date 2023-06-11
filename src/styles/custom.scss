@@ -1,15 +1,13 @@
 .project-item {
-    height: 400px;
-    width: 444px;
+    height: 181px;
+    width: 400px;
     margin: 10px 10px;
     border-radius: 10px;
     background-color: #653fc43f;
-    // border: 1px solid white;
-    // box-shadow: #23a6d5 1px;
     cursor: pointer;
 
     &__add-new-project-wrapper {
-        background-color: gray;
+        background-color: green;
         display: flex;
         overflow: hidden;
         align-items: center;
@@ -21,6 +19,11 @@
         height: 50%;
         margin: 0px 30px;
         background-color: aliceblue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 25px;
+        font-weight: 600;
     }
 
     &__wrapper-content {
@@ -223,4 +226,9 @@
     100% {
         background-position: 0% 50%;
     }
+}
+
+.login-page {
+    display: flex;
+    justify-content: space-between;
 }

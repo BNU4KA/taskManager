@@ -17,5 +17,6 @@ export const removeQueryParams = (router, keysForRemove) => {
 };
 
 export function getRandomInt(max) {
+  return 10;
   return Math.floor(Math.random() * max);
 }
