@@ -5,6 +5,7 @@ import React from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { ROOT_API_URL } from "../src/constants";
 import { loginUser, registerUser } from "../src/slices/userSlice";
 
 const initialState = { login: '', password: '' };
@@ -26,7 +27,8 @@ const Login = () => {
 	const dispatch = useDispatch();
 	const router = useRouter();
     const authHandler = () => {
-		const onSuccess = router.push('http://localhost:4000/');
+		// const onSuccess = router.push('http://localhost:4000/');
+		const onSuccess = router.push(ROOT_API_URL);
 		if (isLoginPage) return dispatch(loginUser({ ...loginState, onSuccess  }));
 		dispatch(registerUser({ ...loginState, onSuccess  }));
 	};
