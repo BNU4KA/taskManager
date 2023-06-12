@@ -3,6 +3,7 @@ import { isArray } from "lodash";
 // export const ROOT_API_URL = 'https://zalupa.by/';
 // http://crimssondead-001-site1.ftempurl.com/taskmanager/api/Project/GetProjectList
 export const ROOT_API_URL = 'http://crimssondead-001-site1.ftempurl.com/api';
+export const ROOT_URL = 'http://crimssondead-001-site1.ftempurl.com';
 
 export const removeQueryParams = (router, keysForRemove) => {
   const { asPath } = router;
