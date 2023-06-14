@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchUser } from '../src/slices/userSlice';
 import { useRouter } from 'next/router';
+import { fetchProgress } from '../src/slices/tasksSlice';
 
 const App = ({ Component }) => {
 const [colorScheme, setColorScheme] = useLocalStorage({
@@ -29,8 +30,8 @@ const [colorScheme, setColorScheme] = useLocalStorage({
 	const router = useRouter();
 	useEffect(() => {
 		if (document.cookie.replace('userId=', '') === '') router.push('/login')
-		console.log('qwe', document.cookie.replace('userId=', ''));
 		if (!isUserLoaded) dispatch(fetchUser({ userId: document.cookie.replace('userId=', '') }));
+		// dispatch(fetchProgress());
     }, []);
 
 	return (

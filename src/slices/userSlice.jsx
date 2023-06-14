@@ -26,8 +26,8 @@ export const loginUser = createAsyncThunk('login/User', async (payload, { getSta
 export const registerUser = createAsyncThunk('reg/User', async (payload, { getState }) => {
   try {
     const { login, password, email, number, onSuccess } = payload;
-    // qwe123_EWQEQ
     // malashevich
+    // qwe123_EWQEQ
     // malashevich2002@gmail.com
     const response = await fetch(`${ROOT_API_URL}/User/register`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ login, password, email, phoneNumber: number }) });
     const responseData = await response.json();

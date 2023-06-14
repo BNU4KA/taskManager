@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Modal, Progress, Textarea, TextInput } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { removeQueryParams } from '../constants/index';
 import { fetchTask, updateTask } from "../slices/tasksSlice";
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { debounce, isEmpty, isNaN, isNull, isUndefined, noop } from "lodash";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import Dropdown from '../services/Dropdown';
 // import TextEditor from "../services/TextEditor";
 import { SpinnerDotted } from 'spinners-react';
+import Talk from 'talkjs';
+
 
 const colorsArray = [
 	'black',
@@ -23,6 +25,75 @@ const colorsArray = [
 	'Pink',
 	'Blue'
 ];
+
+const ChatComponent = () => {
+  const chatboxEl = useRef();
+
+  const [talkLoaded, markTalkLoaded] = useState(false);
+  Talk.ready.then(() => markTalkLoaded(true));
+
+  const { user: { userName, email, id: userId }, isUserLoaded, ...props } = useSelector((store) => store.userData);
+
+  useEffect(() => {
+    if (talkLoaded && isUserLoaded) {
+	  const currentUser = new Talk.User({
+        id: userId || '',
+        name: userName || '',
+        email: email || '',
+        photoUrl: 'henry.jpeg',
+        welcomeMessage: 'Hello!',
+        role: 'default',
+      });
+
+	//   const currentUser = new Talk.User({
+    //     id: '1',
+    //     name: 'Mikita Malashevich 1',
+    //     email: 'henrymill@example.com',
+    //     photoUrl: 'henry.jpeg',
+    //     welcomeMessage: 'Hello!',
+    //     role: 'default',
+    //   });
+      
+      const otherUser = new Talk.User({
+        id: '2',
+        name: 'Mikita Malashevich 2',
+        email: 'jessicawells@example.com',
+        photoUrl: 'jessica.jpeg',
+        welcomeMessage: 'Hello!',
+        role: 'default',
+      });
+
+      const otherUser1 = new Talk.User({
+        id: '3',
+        name: 'Mikita Malashevich 3',
+        email: 'jessicawells@example.com',
+        photoUrl: 'jessica.jpeg',
+        welcomeMessage: 'Hello!',
+        role: 'default',
+      });
+
+      const session = new Talk.Session({
+        appId: 'tj405Zpi',
+        me: currentUser,
+      });
+  
+      const conversationId = Talk.oneOnOneId(currentUser, otherUser, otherUser1);
+      const conversation = session.getOrCreateConversation(conversationId);
+      conversation.setParticipant(currentUser);
+      conversation.setParticipant(otherUser);
+      conversation.setParticipant(otherUser1);
+  
+      const chatbox = session.createChatbox();
+      chatbox.select(conversation);
+
+      chatbox.mount(chatboxEl.current);
+
+      return () => session.destroy();
+    }
+  }, [talkLoaded, isUserLoaded]);
+
+  return <div style={{ height: '650px' }} ref={chatboxEl} />;
+}
 
 const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTaskDispatch = noop, isUser = true }) => {
 	const router = useRouter();
@@ -183,7 +254,7 @@ const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTas
 					{/* оставить ли animate ? хз хз*/}
 				</div>
 			</div>
-			<div className="task-modal-inner task-modal-inner__right">
+			{/* <div className="task-modal-inner task-modal-inner__right">
 				тут будет чат, пидоры из talkjs залочили ключ, пока без него
 				<br />
 				<br />
@@ -200,6 +271,9 @@ const TaskModal = ({ opened, task, setOpened = noop, fetchTask = noop, updateTas
 				вот эту хрень докинуть на проджект пейдж, к айтемам, типо как прогресс по кол-ву текущих задач, RingProgress https://mantine.dev/core/ring-progress/
 				<br />
 				заставить крилла возвращать кол-во проектов по их статусу
+			</div> */}
+			<div className="task-modal-inner task-modal-inner__right" style={{ height: '700px' }}>
+				<ChatComponent />
 			</div>
 		</Modal>
     );

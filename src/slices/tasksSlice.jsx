@@ -25,7 +25,6 @@ export const fetchTasks = createAsyncThunk('fetch/tasks', async ({ onSuccess = n
 
 export const fetchTask = createAsyncThunk('fetch/task', async ({ onSuccess = noop, taskId = '' }, { getState }) => {
   try {
-    // if (taskId === 'qwe') return {};
     const response = await fetch(`${ROOT_API_URL}/Job/item/?id=${taskId}`);
     const responseData = await response.json();
     onSuccess(responseData);
@@ -53,7 +52,6 @@ export const createTask = createAsyncThunk('create/task', async (payload, { getS
   try {
     const { taskId, onSuccess = noop, title, description, projectId, endDate } = payload;
     await fetch(`${ROOT_API_URL}/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: 0, EndDate: endDate, EstimetedTime: 10, SpentTime: 5, progress: 0, JobRefId: "" }) });
-    // await fetch(`${ROOT_API_URL}/Job/create/`, { method: 'POST', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title, description, projectRefId: projectId, startDate: new Date(), status: 0, endDate: endDate, estimetedTime: 10, spentTime: 5, progress: 0, jobRefId: "" }) });
     onSuccess();
     return { taskId, title, description, projectId };
   } catch (err) {
@@ -91,12 +89,24 @@ export const getProjects = createAsyncThunk('get/Projects', async ({ onSuccess =
 export const updateTask = createAsyncThunk('update/task', async (payload, { getState }) => {
   try {
     const { taskId, onSuccess = noop, title, description, projectRefId: projectId, endDate, jobId, progress, status } = payload;
-    console.log('taskId', { taskId, title, description, projectId });
     await fetch(`${ROOT_API_URL}/Job/update/`, { method: 'PATCH', headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Title: title, Description: description, ProjectRefId: projectId, StartDate: new Date(), Status: status, EndDate: endDate, EstimetedTime: 10, SpentTime: 5, progress, JobRefId: "", jobId }) });
     onSuccess();
     return { taskId, title, description, projectId };
   } catch (err) {
     console.log('fetch translation error', err);
+    return {};
+  }
+});
+
+export const fetchProgress = createAsyncThunk('fetch/progress', async (payload, { getState }) => {
+  try {
+    const response = await fetch(`${ROOT_API_URL}/Project/progress`, { method: 'GET', headers: { "Content-Type": "application/json" } });
+    console.log('response', response);
+    const responseData = await response.json();
+    console.log('responseData', responseData);
+    return '';
+  } catch (err) {
+    console.log('fetch progress error', err);
     return {};
   }
 });
